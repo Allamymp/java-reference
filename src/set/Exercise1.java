@@ -1,10 +1,16 @@
 package set;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class Exercise1 {
@@ -39,6 +45,7 @@ public class Exercise1 {
 				System.out.println("Enter a name:");
 				String name = sc.next();
 				User user = new User(name, LocalDateTime.now());
+				 
 				try {
 			        // Cria um FileWriter que não apaga o conteúdo anterior do arquivo
 			        FileWriter fw = new FileWriter("C:\\Temp\\log.txt", true);
@@ -68,6 +75,33 @@ public class Exercise1 {
 			break;
 
 		}
+		
+		try (BufferedReader bfr = new BufferedReader(new FileReader(file))){
+			
+			java.util.Set<User> set = new HashSet<>();
+			
+			
+			String line = bfr.readLine();
+			
+			while(line != null) {
+				String[] fields = line.split(" ");
+				String username = fields[0];
+				Date moment = Date.from(Instant.parse(fields[1]));
+				
+				set.add(new User(username,moment));
+				line = bfr.readLine();
+		
+			}
+		 
+			System.out.println("Total diferent users: " + set.size());
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+	
 
 		sc.close();
 
